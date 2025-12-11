@@ -2,7 +2,7 @@
 
 ## Low Light Results
 ### Original  
-<img src="low_original.png" width="350">
+<img src="  Q6/low_original.png" width="350">
 
 ### Reconstructed (Bits 0–2)  
 <img src="low_reconstructed.png" width="350">
