@@ -1,85 +1,130 @@
-# Q5 – Spatial Filtering (Box & Gaussian)
+# Q4 – HDR Imaging (High Dynamic Range)
 
-## Original Image
+## Input Exposure Images  
+| Bright | Medium | Dark |
+|--------|--------|-------|
+| <img src="Q4/bright_img.jpg" width="300"> | <img src="Q4/medium_img.jpg" width="300"> | <img src="Q4/dark_img.jpg" width="300"> |
+
+---
+
+## HDR Output  
+| Tone-Mapped HDR Result |
+|------------------------|
+| <img src="Q4/hdr_out.jpg" width="500"> |
+
+---
+
+## Question  
+**HDR:** Compute an HDR image via:  
+1. Estimation of the Camera Response Function (CRF)  
+2. Computation of the irradiance/radiance map  
+3. A global tone mapping algorithm  
+
+Use the sample photos provided in the repository or your own (bright, medium, dark exposures).  
+Your HDR pipeline should recover full scene radiance and convert it into a viewable LDR image.
+
+---
+
+## Explanation  
+HDR imaging merges images taken at different exposures to overcome the limited dynamic range of cameras.  
+- **CRF estimation** maps pixel intensities to real radiance levels.  
+- **Irradiance reconstruction** combines exposures using weighted averaging.  
+- **Tone mapping** compresses HDR values into displayable range while preserving details.  
+
+This results in an image showing both highlights and shadows clearly.
+
+---
+
+---
+
+# Q5 – Spatial Filtering (Box & Gaussian Filters)
+
+## Original Image  
 <img src="Q5/Torgya - Arunachal Festival.jpg" width="450">
 
 ---
 
-## 5×5 Box Filter
-
+## 5×5 Box Filter  
 | Normalized | Non-Normalized |
 |-----------|----------------|
 | <img src="Q5/5.5_normlised.jpg" width="350"> | <img src="Q5/5.5_non_normlised.jpg" width="350"> |
 
 ---
 
-## 20×20 Box Filter
-
+## 20×20 Box Filter  
 | Normalized | Non-Normalized |
 |-----------|----------------|
 | <img src="Q5/20.20_normalised.jpg" width="350"> | <img src="Q5/20.20_non_normalised.jpg" width="350"> |
 
 ---
 
-## Gaussian Filter (σ = 3)
-
+## Gaussian Filter (σ = 3)  
 | Non-Normalized | Sum Normalized | Area Normalized |
 |----------------|----------------|-----------------|
 | <img src="Q5/sigma_3_non_normalised1.jpg" width="300"> | <img src="Q5/sigma_3_normalised_sum.jpg" width="300"> | <img src="Q5/sigma_3_normalised_area.jpg" width="300"> |
 
 ---
 
-## **Question**
-**Spatial Filtering:**  
-Implement 5×5 and 20×20 box filters with and without normalization for  
+## Question  
+Implement 5×5 and 20×20 box filters, with and without normalization, on the color image  
 *Torgya – Arunachal Festival.jpg*.  
-This is a color image (RGB), so filtering must be done on all channels.  
-Compute σ, determine the corresponding Gaussian filter size, and apply:  
-- A separable Gaussian filter  
-- A separable normalized Gaussian filter  
 
-Display all outputs.
+Compute σ, derive the Gaussian kernel size, and apply:  
+- a separable Gaussian filter  
+- a separable normalized Gaussian filter  
 
 ---
 
-## **Explanation**
-A box filter replaces each pixel with the average or sum of its neighbors. Normalized box filters divide by the window area to preserve brightness, while non-normalized filters cause images to brighten due to raw summation. Larger kernels like 20×20 blur more than 5×5 due to a wider neighborhood.
+## Explanation  
+A box filter replaces each pixel with the mean (normalized) or sum (non-normalized) of neighboring pixels.  
+Larger kernels (20×20) produce heavier blur than smaller ones (5×5).  
 
-Gaussian filters use weighted averaging, giving more influence to nearby pixels. Without normalization, the Gaussian kernel sum is greater than 1, causing brightness increase. Normalizing by the kernel sum prevents this. Gaussian filters produce smoother, edge-preserving blur, and the separable approach speeds up computation by applying horizontal and vertical passes instead of full 2-D convolution.
+Gaussian filtering performs weighted averaging:  
+- **Non-normalized** Gaussian brightens the image.  
+- **Sum-normalized** preserves brightness.  
+- **Area-normalized** scales by window area.  
+
+Gaussian filters produce smoother, more natural-looking blur compared to box filters.
+
+---
 
 ---
 
 # Q6 – Bit-Plane Slicing
 
-## Low-Light Image Results
-
+## Low-Light Results  
 | Original | Reconstructed (Bits 0–2) | Difference |
 |----------|---------------------------|------------|
 | <img src="Q6/low_original.png" width="300"> | <img src="Q6/low_reconstructed.png" width="300"> | <img src="Q6/low_difference.png" width="300"> |
 
 ---
 
-## Bright-Light Image Results
-
+## Bright-Light Results  
 | Original | Reconstructed (Bits 0–2) | Difference |
 |----------|---------------------------|------------|
 | <img src="Q6/bright_original.png" width="300"> | <img src="Q6/bright_reconstructed.png" width="300"> | <img src="Q6/bright_difference.png" width="300"> |
 
 ---
 
-## **Question**
-Capture one photo in low light and one in bright light.  
-Extract all bit-planes for each image, reconstruct the image using the lowest three bit-planes (bits 0, 1, 2), and compute the difference between this reconstruction and the original.
+## Question  
+Capture one image in low light and one in bright light.  
+Extract all 8 bit-planes, reconstruct the image using bits 0–2, and compute the difference from the original.
 
 ---
 
-## **Explanation**
-A grayscale pixel is represented by 8 bits (bit 0 = least significant).  
-Bit-plane slicing visualizes how each bit contributes to the overall image.  
-Reconstruction using only bits 0–2 keeps only coarse details, while finer textures are stored in higher bits (3–7).  
-The difference image highlights what information is lost.  
-Bright-light images contain stronger high-bit details, producing larger differences, while low-light images generally have weaker high-bit structure.
+## Explanation  
+Each grayscale pixel is represented using 8 bits.  
+- **Lower bits (0–2)** store coarse details.  
+- **Higher bits (3–7)** store fine textures and important information.  
+
+Reconstruction using only bits 0–2 produces a simplified image.  
+The **difference** image highlights the information lost in higher bit-planes.  
+Bright images usually contain stronger high-bit structure compared to low-light images.
 
 ---
 
-
+## Reference Scripts  
+- `hdr.py`  
+- `boxfilter.py`  
+- `gaussian_filter.py`  
+- `bit_slicing.py`
