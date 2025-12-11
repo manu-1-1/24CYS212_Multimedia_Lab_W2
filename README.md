@@ -122,9 +122,3 @@ The **difference** image highlights the information lost in higher bit-planes.
 Bright images usually contain stronger high-bit structure compared to low-light images.
 
 ---
-
-## Reference Scripts  
-- `hdr.py`  
-- `boxfilter.py`  
-- `gaussian_filter.py`  
-- `bit_slicing.py`
